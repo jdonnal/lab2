@@ -1,29 +1,38 @@
 #!/usr/bin/python
 
+# import system modules
 import pygame,sys
+from pygame.locals import *
 import random
+import time
+
+# import custom modules
 import launcher
 import target
 import rock
-from pygame.locals import *
 from colors import *
-import time
 
+# tunable constants
 HEIGHT=400
 WIDTH=500
 FPS = 3
-TARGET_WIDTH = 30
+TARGET_WIDTH = 50
 
 def main():
+    # start up pygame and build a game window
     pygame.init()
     fpsClock=pygame.time.Clock()
     window = pygame.display.set_mode((WIDTH,HEIGHT),0,32)
     pygame.display.set_caption('Launchr')
+
+    # create custom objects
     my_launcher = launcher.Launcher(0,HEIGHT-20)
     my_rock = rock.Rock(0,HEIGHT-20)
-    my_target = target.Target(random.random()*WIDTH, HEIGHT-20,
+    my_target = target.Target((random.random()*280)+50, HEIGHT-20,
                               TARGET_WIDTH)
     objs = [my_launcher, my_rock, my_target]
+
+    # Main game loop
     while(True):
         # 1 Process Events
         for event in pygame.event.get():
@@ -36,8 +45,6 @@ def main():
                     my_launcher.changeMag(5)
                 if event.key == pygame.K_LEFT:
                     my_launcher.changeMag(-5)
-                if event.key == pygame.K_a:
-                    my_target.moveTo(random.random()*WIDTH)
                 if (event.key == pygame.K_SPACE) and not my_rock.isMoving():
                     my_launcher.fire(my_rock)
             if event.type == QUIT:
@@ -45,14 +52,15 @@ def main():
                 sys.exit()
 
         # 2 Update Game State
-        my_rock.move(1.0/FPS)
+        my_rock.move(1.0/FPS) # force floating point division
         if(my_rock.y>HEIGHT):
+            # rock is below the screen
             my_rock.moveTo(0,HEIGHT-20)
             displayMessage(window,"Miss!")
         if(my_target.hitBy(my_rock.getRect())):
+           # rock hit the target!
            my_rock.moveTo(0,HEIGHT-20)
            displayMessage(window,"Hit!")
-           my_target.moveTo(random.random()*WIDTH)
 
         # 3 Update Display
         drawWorld(window)
@@ -63,9 +71,12 @@ def main():
         
     
 def drawWorld(surf):
+    # erase surface with a fill
     surf.fill(SKY_BLUE)
+    # add in some grass
     grass_rect=(0,HEIGHT-20,WIDTH,20)
     pygame.draw.rect(surf,GRASS_GREEN,grass_rect)
+    # write the game title
     fontObj = pygame.font.Font('freesansbold.ttf',32)
     textSurfaceObj = fontObj.render('Launchr 1.0',
                                     True, BLACK)
@@ -74,6 +85,7 @@ def drawWorld(surf):
     surf.blit(textSurfaceObj,textRectObj)
 
 def displayMessage(surf, msg):
+    # display [msg] for 1 second (freezes the game)
     fontObj = pygame.font.Font('freesansbold.ttf',40)
     textSurfaceObj = fontObj.render(msg,
                                     True, ORANGE)
