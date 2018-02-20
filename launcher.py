@@ -33,7 +33,7 @@ class Launcher:
 
   def fire(self, rock):
     rock.v_x = self.mag*math.cos(self.angle*math.pi/180)*V_SCALE
-    rock.v_y = -1*self.mag*math.cos(self.angle*math.pi/180)*V_SCALE
+    rock.v_y = -1*self.mag*math.sin(self.angle*math.pi/180)*V_SCALE
       
   def draw(self,surf):
       #figure out dx and dy from polar coords

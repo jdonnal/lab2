@@ -15,7 +15,7 @@ from colors import *
 # tunable constants
 HEIGHT=400
 WIDTH=500
-FPS = 3
+FPS = 30
 TARGET_WIDTH = 50
 
 def main():
