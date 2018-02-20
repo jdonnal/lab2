@@ -10,6 +10,9 @@ class Target:
         
     def hitBy(self,rect):
         return self.rect.colliderect(rect)
+
+    def moveTo(self, x):
+        self.rect.centerx = x
         
     def draw(self,surf):
         pygame.draw.rect(surf, TARGET_COLOR, self.rect)

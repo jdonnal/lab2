@@ -75,6 +75,7 @@ def main():
            my_rock.moveTo(0,HEIGHT-20)
            s.write('g')
            displayMessage(window,"Hit!")
+           my_target.moveTo((random.random()*280)+50)
 
         # 3 Update Display
         drawWorld(window)
